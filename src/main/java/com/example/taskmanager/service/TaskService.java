@@ -7,7 +7,10 @@ import com.example.taskmanager.exception.TaskException;
 import com.example.taskmanager.repository.TaskRepository;
 import com.example.taskmanager.validation.TaskValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +55,10 @@ public class TaskService {
     }
 
     // READ BY ID
+    @Cacheable(value = "tasks", key = "#id")
     public TaskResponseDTO getById(Long id) {
+
+        System.out.println("Fetching from Database...");
 
         Task task = repository.findById(id)
                 .orElseThrow(() ->
@@ -62,6 +68,7 @@ public class TaskService {
     }
 
     // UPDATE
+    @CachePut(value = "tasks", key = "#id")
     public TaskResponseDTO update(Long id,
                                   TaskRequestDTO request) {
 
@@ -74,16 +81,21 @@ public class TaskService {
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
         task.setPriority(request.getPriority());
-        task.setCompletionPercentage(request.getCompletionPercentage());
-        task.setAssignedDate(request.getAssignedDate());
-        task.setDueDate(request.getDueDate());
+        task.setCompletionPercentage(
+                request.getCompletionPercentage());
+        task.setAssignedDate(
+                request.getAssignedDate());
+        task.setDueDate(
+                request.getDueDate());
 
-        Task updatedTask = repository.save(task);
+        Task updatedTask =
+                repository.save(task);
 
         return mapToDTO(updatedTask);
     }
 
     // DELETE
+    @CacheEvict(value = "tasks", key = "#id")
     public void delete(Long id) {
 
         Task task = repository.findById(id)
