@@ -3,6 +3,7 @@ package com.example.taskmanager.service;
 import com.example.taskmanager.dto.TaskRequestDTO;
 import com.example.taskmanager.dto.TaskResponseDTO;
 import com.example.taskmanager.entity.Task;
+import com.example.taskmanager.exception.TaskException;
 import com.example.taskmanager.repository.TaskRepository;
 import com.example.taskmanager.validation.TaskValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,7 @@ public class TaskService {
     TaskRepository repository;
 
     // CREATE
-    public TaskResponseDTO save(
-            TaskRequestDTO request) {
+    public TaskResponseDTO save(TaskRequestDTO request) {
 
         TaskValidation.validate(request);
 
@@ -28,65 +28,84 @@ public class TaskService {
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
         task.setPriority(request.getPriority());
-        task.setCompletionPercentage(
-                request.getCompletionPercentage());
-        task.setAssignedDate(
-                request.getAssignedDate());
-        task.setDueDate(
-                request.getDueDate());
+        task.setCompletionPercentage(request.getCompletionPercentage());
+        task.setAssignedDate(request.getAssignedDate());
+        task.setDueDate(request.getDueDate());
 
-        Task savedTask =
-                repository.save(task);
+        Task savedTask = repository.save(task);
 
-        TaskResponseDTO response =
-                new TaskResponseDTO();
-
-        response.setId(savedTask.getId());
-        response.setTitle(savedTask.getTitle());
-        response.setDescription(
-                savedTask.getDescription());
-        response.setPriority(
-                savedTask.getPriority());
-        response.setCompletionPercentage(
-                savedTask.getCompletionPercentage());
-        response.setAssignedDate(
-                savedTask.getAssignedDate());
-        response.setDueDate(
-                savedTask.getDueDate());
-
-        return response;
+        return mapToDTO(savedTask);
     }
 
     // READ ALL
     public List<TaskResponseDTO> getAll() {
 
-        List<Task> tasks =
-                repository.findAll();
+        List<Task> tasks = repository.findAll();
 
-        List<TaskResponseDTO> dtoList =
-                new ArrayList<>();
+        List<TaskResponseDTO> dtoList = new ArrayList<>();
 
         for(Task task : tasks) {
-
-            TaskResponseDTO dto =
-                    new TaskResponseDTO();
-
-            dto.setId(task.getId());
-            dto.setTitle(task.getTitle());
-            dto.setDescription(
-                    task.getDescription());
-            dto.setPriority(
-                    task.getPriority());
-            dto.setCompletionPercentage(
-                    task.getCompletionPercentage());
-            dto.setAssignedDate(
-                    task.getAssignedDate());
-            dto.setDueDate(
-                    task.getDueDate());
-
-            dtoList.add(dto);
+            dtoList.add(mapToDTO(task));
         }
 
         return dtoList;
+    }
+
+    // READ BY ID
+    public TaskResponseDTO getById(Long id) {
+
+        Task task = repository.findById(id)
+                .orElseThrow(() ->
+                        new TaskException("Task not found"));
+
+        return mapToDTO(task);
+    }
+
+    // UPDATE
+    public TaskResponseDTO update(Long id,
+                                  TaskRequestDTO request) {
+
+        TaskValidation.validate(request);
+
+        Task task = repository.findById(id)
+                .orElseThrow(() ->
+                        new TaskException("Task not found"));
+
+        task.setTitle(request.getTitle());
+        task.setDescription(request.getDescription());
+        task.setPriority(request.getPriority());
+        task.setCompletionPercentage(request.getCompletionPercentage());
+        task.setAssignedDate(request.getAssignedDate());
+        task.setDueDate(request.getDueDate());
+
+        Task updatedTask = repository.save(task);
+
+        return mapToDTO(updatedTask);
+    }
+
+    // DELETE
+    public void delete(Long id) {
+
+        Task task = repository.findById(id)
+                .orElseThrow(() ->
+                        new TaskException("Task not found"));
+
+        repository.delete(task);
+    }
+
+    // DTO Mapping Method
+    private TaskResponseDTO mapToDTO(Task task) {
+
+        TaskResponseDTO dto = new TaskResponseDTO();
+
+        dto.setId(task.getId());
+        dto.setAssignedDate(task.getAssignedDate());
+        dto.setTitle(task.getTitle());
+        dto.setDescription(task.getDescription());
+        dto.setDueDate(task.getDueDate());
+        dto.setPriority(task.getPriority());
+        dto.setCompletionPercentage(task.getCompletionPercentage());
+
+        return dto;
     }
 }

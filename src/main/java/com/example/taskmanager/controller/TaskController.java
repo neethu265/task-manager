@@ -16,21 +16,51 @@ public class TaskController {
     @Autowired
     TaskService service;
 
+    // CREATE
     @PostMapping
-    public ResponseEntity<TaskResponseDTO>
-    createTask(
+    public ResponseEntity<TaskResponseDTO> createTask(
             @RequestBody TaskRequestDTO request) {
 
         return ResponseEntity.ok(
                 service.save(request));
     }
 
+    // READ ALL
     @GetMapping
     public ResponseEntity<List<TaskResponseDTO>>
-    getAllTasks()
-    {
+    getAllTasks() {
 
         return ResponseEntity.ok(
                 service.getAll());
+    }
+
+    // READ ONE
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO>
+    getTaskById(@PathVariable Long id) {
+
+        return ResponseEntity.ok(
+                service.getById(id));
+    }
+
+    // UPDATE
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO>
+    updateTask(@PathVariable Long id,
+               @RequestBody TaskRequestDTO request) {
+
+        return ResponseEntity.ok(
+                service.update(id, request));
+    }
+
+    // DELETE
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String>
+    deleteTask(@PathVariable Long id) {
+
+        service.delete(id);
+
+        return ResponseEntity.ok(
+                "Task deleted successfully");
     }
 }
