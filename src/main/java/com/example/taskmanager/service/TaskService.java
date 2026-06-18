@@ -92,6 +92,51 @@ public class TaskService {
 
         repository.delete(task);
     }
+    public List<TaskResponseDTO>
+    getByPriority(String priority) {
+
+        List<Task> tasks =
+                repository.findByPriority(priority);
+
+        List<TaskResponseDTO> dtoList =
+                new ArrayList<>();
+
+        for(Task task : tasks) {
+            dtoList.add(mapToDTO(task));
+        }
+
+        return dtoList;
+    }
+    public List<TaskResponseDTO>
+    getAlmostCompletedTasks() {
+
+        List<Task> tasks =
+                repository.getAlmostCompletedTasks();
+
+        List<TaskResponseDTO> dtoList =
+                new ArrayList<>();
+
+        for(Task task : tasks) {
+            dtoList.add(mapToDTO(task));
+        }
+
+        return dtoList;
+    }
+    public List<TaskResponseDTO>
+    getCompletedTasks() {
+
+        List<Task> tasks =
+                repository.getCompletedTasks();
+
+        List<TaskResponseDTO> dtoList =
+                new ArrayList<>();
+
+        for(Task task : tasks) {
+            dtoList.add(mapToDTO(task));
+        }
+
+        return dtoList;
+    }
 
     // DTO Mapping Method
     private TaskResponseDTO mapToDTO(Task task) {

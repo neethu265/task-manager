@@ -24,8 +24,29 @@ public class TaskController {
         return ResponseEntity.ok(
                 service.save(request));
     }
+    @GetMapping("/priority/{priority}")
+    public ResponseEntity<List<TaskResponseDTO>>
+    getTasksByPriority(
+            @PathVariable String priority) {
 
+        return ResponseEntity.ok(
+                service.getByPriority(priority));
+    }
+    @GetMapping("/completed")
+    public ResponseEntity<List<TaskResponseDTO>>
+    getCompletedTasks() {
+
+        return ResponseEntity.ok(
+                service.getCompletedTasks());
+    }
     // READ ALL
+    @GetMapping("/almost-complete")
+    public ResponseEntity<List<TaskResponseDTO>>
+    getAlmostCompletedTasks() {
+
+        return ResponseEntity.ok(
+                service.getAlmostCompletedTasks());
+    }
     @GetMapping
     public ResponseEntity<List<TaskResponseDTO>>
     getAllTasks() {
