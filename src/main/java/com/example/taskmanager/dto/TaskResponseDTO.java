@@ -1,16 +1,32 @@
 package com.example.taskmanager.dto;
 
 import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonPropertyOrder({
+        "id",
+        "assignedDate",
+        "title",
+        "description",
+        "dueDate",
+        "priority",
+        "completionPercentage"
+})
 public class TaskResponseDTO {
 
     private Long id;
-    private String title;
-    private String description;
-    private String priority;
-    private Integer completionPercentage;
+
     private LocalDate assignedDate;
+
+    private String title;
+
+    private String description;
+
     private LocalDate dueDate;
+
+    private String priority;
+
+    private Integer completionPercentage;
 
     public TaskResponseDTO() {
     }
@@ -21,6 +37,14 @@ public class TaskResponseDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public LocalDate getAssignedDate() {
+        return assignedDate;
+    }
+
+    public void setAssignedDate(LocalDate assignedDate) {
+        this.assignedDate = assignedDate;
     }
 
     public String getTitle() {
@@ -39,6 +63,14 @@ public class TaskResponseDTO {
         this.description = description;
     }
 
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
     public String getPriority() {
         return priority;
     }
@@ -53,21 +85,5 @@ public class TaskResponseDTO {
 
     public void setCompletionPercentage(Integer completionPercentage) {
         this.completionPercentage = completionPercentage;
-    }
-
-    public LocalDate getAssignedDate() {
-        return assignedDate;
-    }
-
-    public void setAssignedDate(LocalDate assignedDate) {
-        this.assignedDate = assignedDate;
-    }
-
-    public LocalDate getDueDate() {
-        return dueDate;
-    }
-
-    public void setDueDate(LocalDate dueDate) {
-        this.dueDate = dueDate;
     }
 }
