@@ -1,36 +1,17 @@
-package com.example.taskmanager.entity;
+package com.example.taskmanager.dto;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-public class Task {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class TaskRequestDTO {
 
     private String title;
-
     private String description;
-
     private String priority;
-
     private Integer completionPercentage;
-
     private LocalDate assignedDate;
-
     private LocalDate dueDate;
 
-    public Task() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public TaskRequestDTO() {
     }
 
     public String getTitle() {
