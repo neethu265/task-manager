@@ -14,14 +14,17 @@ import org.springframework.cache.annotation.Cacheable;
 
 import java.util.ArrayList;
 import java.util.List;
-
 @Service
 public class TaskService {
 
-    @Autowired
-    TaskRepository repository;
+    private final TaskRepository repository;
 
-    // CREATE
+    public TaskService(TaskRepository repository) {
+        this.repository = repository;
+    }
+
+
+    // CREATE++
     public TaskResponseDTO save(TaskRequestDTO request) {
 
         TaskValidation.validate(request);
@@ -35,7 +38,7 @@ public class TaskService {
         task.setAssignedDate(request.getAssignedDate());
         task.setDueDate(request.getDueDate());
 
-        Task savedTask = repository.save(task);
+        Task Task = repository.save(task);
 
         return mapToDTO(savedTask);
     }

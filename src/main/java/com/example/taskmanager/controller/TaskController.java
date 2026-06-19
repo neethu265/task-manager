@@ -13,9 +13,11 @@ import java.util.List;
 @RequestMapping("/task")
 public class TaskController {
 
-    @Autowired
-    TaskService service;
+    private final TaskService service;
 
+    public TaskController(TaskService service) {
+        this.service = service;
+    }
     // CREATE
     @PostMapping
     public ResponseEntity<TaskResponseDTO> createTask(
