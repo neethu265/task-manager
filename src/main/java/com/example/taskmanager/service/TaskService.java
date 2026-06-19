@@ -38,7 +38,7 @@ public class TaskService {
         task.setAssignedDate(request.getAssignedDate());
         task.setDueDate(request.getDueDate());
 
-        Task Task = repository.save(task);
+        Task savedTask = repository.save(task);
 
         return mapToDTO(savedTask);
     }
